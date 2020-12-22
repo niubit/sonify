@@ -124,7 +124,7 @@ def get_instrument(instrument_name):
     return program_number - 1, instrument_type
 
 
-def write_to_midifile(data, track_type='single'):
+def write_to_midifile(data, track_type='single', file='temp.mid'):
     """
     data: list of tuples of x, y coordinates for pitch and timing
           Optional: add a string to the start of the data list to specify instrument!
@@ -136,7 +136,8 @@ def write_to_midifile(data, track_type='single'):
     if track_type == 'single':
         data = [data]
 
-    memfile = io.BytesIO()
+    #memfile = io.BytesIO()
+    memfile = open(file, 'wb')
     midifile = MIDIFile(numTracks=len(data), adjust_origin=False)
 
     track = 0
@@ -169,16 +170,17 @@ def write_to_midifile(data, track_type='single'):
         channel = 0
 
     midifile.writeFile(memfile)
+    memfile.close()
 
-    return memfile
+    return file
 
 
-def play_memfile_as_midi(memfile):
+def play_memfile_as_midi(file):
     # https://stackoverflow.com/questions/27279864/generate-midi-file-and-play-it-without-saving-it-to-disk
+    pygame.mixer.pre_init(44100, -16, 2, 2048)
     pygame.init()
     pygame.mixer.init()
-    memfile.seek(0)
-    pygame.mixer.music.load(memfile)
+    pygame.mixer.music.load(file)
     pygame.mixer.music.play()
     while pygame.mixer.music.get_busy():
         sleep(1)
@@ -213,3 +215,31 @@ def play_midi_from_data(input_data, key=None, number_of_octaves=4, track_type='s
 
     memfile = write_to_midifile(data, track_type)
     play_memfile_as_midi(memfile)
+
+def create_midi_from_data(input_data, key=None, number_of_octaves=4, track_type='single', file='temp.mid'):
+    """
+    input_data: a list of tuples, or a list of lists of tuples to add as separate tracks
+    eg:
+    input_data = [(1, 5), (5, 7)] OR
+    input_data = [
+        [(1, 5), (5, 7)],
+        [(4, 7), (2, 10)]
+    ]
+    key: key to play back the graph -- see constants.py for current choices
+    number_of_octaves: number of octaves used to restrict the music playback
+     when converting to a key
+
+    optional -- append an instrument name to the start of each data list
+                to play back using that program number!
+    """
+    if key:
+        if track_type == 'multiple':
+            data = []
+            for data_list in input_data:
+                data.append(convert_to_key(data_list, key, number_of_octaves))
+        else:
+            data = convert_to_key(input_data, key, number_of_octaves)
+    else:
+        data = input_data
+
+    memfile = write_to_midifile(data, track_type, file=file)
