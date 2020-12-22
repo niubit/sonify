@@ -6,11 +6,10 @@ Take a CSV of data, output sound! Using Python!
 ## Setup
 
 From inside a virtualenv, run:
-- `mkvirtualenv --python=python3 sonify`
+- `mkvirtualenv --python=python3.6 sonify`
 - `python setup.py install`
 
-**ability to install via pypi coming soon!**
-
+(It doesn't compile without errors in Python 3.8)
 
 ## Running the examples
 
@@ -20,7 +19,7 @@ To run those examples, you'll need to install from the example's requirements.tx
 from inside your virtualenv...
 - `pip install -r examples/requirements.txt`
 
-For now, there are a few examples in the included [jupyter notebook](https://github.com/erinspace/sonify/blob/master/examples/Graphs_and_Sounds.ipynb)
+For now, there are a few examples in the included [jupyter notebook](examples/Graphs_and_Sounds.ipynb)
 
 Start the notebook with:
 - `jupyter notebook`
