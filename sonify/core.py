@@ -149,7 +149,7 @@ def write_to_midifile(data, track_type='single', file='temp.mid'):
 
     for data_list in data:
         midifile.addTrackName(track, time, 'Track {}'.format(track))
-        midifile.addTempo(track, time, 120)
+        midifile.addTempo(track, time, 60)
 
         instrument_type = 'melodic'
         if type(data_list[0]) != tuple:
