@@ -137,7 +137,7 @@ def write_to_midifile(data, track_type='single', file='temp.mid'):
         data = [data]
 
     #memfile = io.BytesIO()
-    memfile = open(file, 'wb')
+    realfile = open(file, 'wb')
     midifile = MIDIFile(numTracks=len(data), adjust_origin=False)
 
     track = 0
@@ -169,8 +169,8 @@ def write_to_midifile(data, track_type='single', file='temp.mid'):
         track += 1
         channel = 0
 
-    midifile.writeFile(memfile)
-    memfile.close()
+    midifile.writeFile(realfile)
+    realfile.close()
 
     return file
 
