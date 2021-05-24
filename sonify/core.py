@@ -95,8 +95,10 @@ def scale_y_to_midi_range(data, new_min=0, new_max=127):
 
 
 def scale_list_to_range(list_to_scale, new_min, new_max):
-    old_min = min(list_to_scale)
-    old_max = max(list_to_scale)
+	return scale_list_to_range2(list_to_scale, new_min, new_max, min(list_to_scale), max(list_to_scale))
+
+
+def scale_list_to_range2(list_to_scale, new_min, new_max, old_min, old_max):
     return [get_scaled_value(value, old_min, old_max, new_min, new_max) for value in list_to_scale]
 
 
